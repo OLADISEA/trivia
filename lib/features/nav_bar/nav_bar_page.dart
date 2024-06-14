@@ -28,7 +28,7 @@ class NavBarPage extends StatelessWidget {
       ),
       PersistentBottomNavBarItem(
         icon: Icon(Icons.search),
-        title: ("Search"),
+        title: ("Leaders Board"),
         activeColorPrimary: Colors.blue,
         inactiveColorPrimary: Colors.grey,
       ),
