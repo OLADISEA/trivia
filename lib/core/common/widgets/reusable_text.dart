@@ -5,7 +5,8 @@ class Reusable extends StatelessWidget {
   final double? fontSize;
   final Color? textColor;
   final TextAlign? textAlign;
-  const Reusable({super.key, required this.text, this.fontSize, this.textColor, this.textAlign});
+  final FontWeight? fontWeight;
+  const Reusable({super.key, required this.text, this.fontSize, this.textColor, this.textAlign, this.fontWeight});
 
   @override
   Widget build(BuildContext context) {
@@ -13,6 +14,7 @@ class Reusable extends StatelessWidget {
       text,
       textAlign: textAlign??TextAlign.center,
       style: TextStyle(
+        fontWeight: fontWeight??FontWeight.normal,
         fontSize: fontSize?? 15,
         color: textColor?? Colors.black
       ),
