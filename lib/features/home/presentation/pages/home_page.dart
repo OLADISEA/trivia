@@ -7,12 +7,12 @@ import 'package:trivia/features/home/presentation/widgets/quiz_type.dart';
 import 'package:trivia/features/home/presentation/widgets/user_ranking.dart';
 
 class HomePage extends StatelessWidget {
-  const HomePage({Key? key}) : super(key: key);
+  const HomePage({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey.withOpacity(0.5),
+      backgroundColor: Colors.white,
       body: Container(
         margin: EdgeInsets.only(top: 78.h,left: 27.w,right: 27.w),
         child: Column(
@@ -21,11 +21,12 @@ class HomePage extends StatelessWidget {
             const HomeHeader(),
             SizedBox(height: 15.h,),
             const UserRanking(),
-            SizedBox(height: 10.h,),
+            SizedBox(height: 20.h,),
             const QuizType(),
-            Reusable(text: "Let's Play",fontSize: 18.sp,),
             SizedBox(height: 10.h,),
-            QuizCategory()
+            Reusable(text: "Let's Play",fontSize: 25.sp,fontWeight: FontWeight.w700,),
+            //SizedBox(height: 5.h,),
+            const QuizCategory()
 
           ],
         ),
