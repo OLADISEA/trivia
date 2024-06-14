@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:trivia/core/common/widgets/reusable_text.dart';
 
 import '../../auth/presentation/pages/login_page.dart';
@@ -11,7 +12,7 @@ class GetStarted extends StatelessWidget {
     return InkWell(
       onTap: ()=>Navigator.of(context).push(MaterialPageRoute(builder: (context)=> LoginPage())),
       child: Container(
-        width: 140,
+        width: 140.w,
         height: 50,
         decoration: BoxDecoration(
           color: Colors.black,
@@ -24,6 +25,7 @@ class GetStarted extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               const Reusable(text: "Get Started",textColor: Colors.white,),
+              SizedBox(width: 5.w,),
               Container(
                   decoration: const BoxDecoration(
                     color: Colors.white,
