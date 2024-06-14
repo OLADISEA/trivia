@@ -42,7 +42,7 @@ class LoginPage extends StatelessWidget {
               },),
             ),
             SizedBox(height: 20.h,),
-            SubmitButton(text: "LOGIN", color: Colors.lightBlue,
+            SubmitButton(text: "LOGIN", color: Colors.lightBlue,textColor: Colors.white,
               onTap: (){
                 Navigator.of(context).push(MaterialPageRoute(builder: (context)=> NavBarPage()));
               }),
