@@ -1,13 +1,24 @@
+
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:trivia/features/auth/presentation/bloc/auth_bloc.dart';
+import 'package:trivia/firebase_options.dart';
 
 import 'features/splash_screen/splash_screen.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
-  runApp(const MyApp());
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform
+  );
+  runApp(
+      MultiBlocProvider(
+          providers: [
+            BlocProvider(create: (context) => AuthBloc())
+          ],
+          child: const MyApp()));
 }
 
 class MyApp extends StatelessWidget {
