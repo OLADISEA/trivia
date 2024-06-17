@@ -5,6 +5,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:trivia/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:trivia/firebase_options.dart';
 
+import 'features/quiz/bloc/quiz_bloc.dart';
+import 'features/quiz/data/quiz_repository.dart';
 import 'features/splash_screen/splash_screen.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -16,7 +18,9 @@ void main() async{
   runApp(
       MultiBlocProvider(
           providers: [
-            BlocProvider(create: (context) => AuthBloc())
+            BlocProvider(create: (context) => AuthBloc()),
+            BlocProvider(
+              create: (context) => QuizBloc(quizRepository: QuizRepository())),
           ],
           child: const MyApp()));
 }
