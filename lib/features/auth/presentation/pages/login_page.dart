@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:trivia/core/common/widgets/reusable_text.dart';
+import 'package:trivia/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:trivia/features/auth/presentation/pages/forgot_password.dart';
 import 'package:trivia/features/auth/presentation/pages/register_page.dart';
 import 'package:trivia/features/auth/presentation/widgets/submit_button.dart';
@@ -42,10 +44,19 @@ class LoginPage extends StatelessWidget {
               },),
             ),
             SizedBox(height: 20.h,),
-            SubmitButton(text: "LOGIN", color: Colors.lightBlue,textColor: Colors.white,
-              onTap: (){
-                Navigator.of(context).push(MaterialPageRoute(builder: (context)=> NavBarPage()));
-              }),
+            BlocConsumer<AuthBloc, AuthState>(
+              builder: (BuildContext context, state) {
+                return SubmitButton(text: "LOGIN", color: Colors.lightBlue,textColor: Colors.white,
+                    onTap: (){
+                      context.read<AuthBloc>().add(LoginRequested(emailController.text, passwordController.text));
+                    });
+              },
+              listener: (BuildContext context, Object? state) {
+                if(state is AuthAuthenticated){
+                  Navigator.of(context).push(MaterialPageRoute(builder: (context)=> NavBarPage()));
+                }
+              },
+            ),
             SizedBox(height: 100.h,),
 
             Center(
