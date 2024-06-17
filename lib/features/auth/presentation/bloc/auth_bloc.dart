@@ -2,11 +2,13 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:trivia/features/auth/data/shared_preference_helper.dart';
 
 part 'auth_event.dart';
 part 'auth_state.dart';
 
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
+  final SharedPreferencesHelper _preferencesHelper = SharedPreferencesHelper();
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
@@ -36,10 +38,15 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   Future<void> _onLoginRequested(LoginRequested event, Emitter<AuthState> emit) async {
     try {
       emit(AuthLoading());
-      await _firebaseAuth.signInWithEmailAndPassword(
+      UserCredential userCredential = await _firebaseAuth.signInWithEmailAndPassword(
         email: event.email,
         password: event.password,
       );
+      DocumentSnapshot userDoc = await _firestore.collection('users').doc(userCredential.user!.uid).get();
+      String userName = userDoc['name'];
+      _preferencesHelper.saveUserEmail(event.email);
+      _preferencesHelper.saveUserName(userName);
+
       emit(AuthAuthenticated());
     } catch (e) {
       emit(AuthError(e.toString()));
@@ -48,6 +55,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
   Future<void> _onLogoutRequested(LogoutRequested event, Emitter<AuthState> emit) async {
     await _firebaseAuth.signOut();
+    await _preferencesHelper.clearUserData();
     emit(AuthUnauthenticated());
   }
 }
