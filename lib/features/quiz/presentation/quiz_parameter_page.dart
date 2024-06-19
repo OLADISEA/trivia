@@ -5,7 +5,8 @@ import '../data/category_data.dart';
 
 class QuizParameterPage extends StatefulWidget {
   final String title;
-  const QuizParameterPage({super.key, required this.title});
+  final int index;
+  const QuizParameterPage({super.key, required this.title, required this.index});
 
   @override
   _QuizParameterPageState createState() => _QuizParameterPageState();
@@ -31,7 +32,7 @@ class _QuizParameterPageState extends State<QuizParameterPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Quiz Parameters'),
+        title: const Text('Quiz Parameters'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -39,8 +40,10 @@ class _QuizParameterPageState extends State<QuizParameterPage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             DropdownButtonFormField<String>(
-              decoration: const InputDecoration(labelText: 'Category'),
-              value: _selectedCategory, // Set initial value here
+              decoration: const InputDecoration(
+                  labelText: 'Category'
+              ),
+              //value: categories[widget.index].name, // Set initial value here
               items: categories.map((category) {
                 return DropdownMenuItem<String>(
                   value: category.id,
