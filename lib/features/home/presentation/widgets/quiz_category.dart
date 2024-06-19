@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:trivia/core/common/widgets/reusable_text.dart';
 import 'package:trivia/features/quiz/data/category_data.dart';
-import 'package:trivia/features/quiz/presentation/quiz_page.dart';
 import 'package:trivia/features/quiz/presentation/quiz_parameter_page.dart';
 
 class QuizCategory extends StatelessWidget {
@@ -12,7 +11,7 @@ class QuizCategory extends StatelessWidget {
   Widget build(BuildContext context) {
     return Expanded(
       child: GridView.builder(
-          itemCount: categories.length,
+          itemCount: categories.length-1,
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 2, // Number of items per row
             crossAxisSpacing: 10.w, // Horizontal spacing between items
@@ -22,19 +21,20 @@ class QuizCategory extends StatelessWidget {
           itemBuilder: (context, index){
             final imageList = ["general_knowledge.jpg","books.jpg","music.png","computer.jpg"];
             final titleList = ["General knowledge","Books","Music","Computer"];
-            return gridItem(context: context,image: categories[index+1].asset, quizTitle: categories[index+1].name, questionsNum: "1400",);
+            return gridItem(context: context,image: categories[index+1].asset, quizTitle: categories[index+1].name, questionsNum: "1400",index: index+1);
           }),
     );
   }
 
  Widget gridItem({
+   required int index,
    required BuildContext context,
    required String image,
    required String quizTitle,
    required String questionsNum}){
     return InkWell(
         onTap: (){
-          Navigator.of(context).push(MaterialPageRoute(builder: (context)=> QuizParameterPage(title: quizTitle,)));
+          Navigator.of(context).push(MaterialPageRoute(builder: (context)=> QuizParameterPage(title: quizTitle,index: index)));
         },
         child: Container(
           height: 300.h,
