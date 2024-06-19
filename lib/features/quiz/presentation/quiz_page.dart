@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:trivia/features/auth/presentation/widgets/submit_button.dart';
 import 'package:trivia/features/quiz/data/quiz_repository.dart';
+import 'package:trivia/features/quiz/presentation/quiz_result/quiz_result_page.dart';
 
 import '../../../core/common/model/question.dart';
 import '../bloc/quiz_bloc.dart';
@@ -34,10 +35,12 @@ class _QuizPageState extends State<QuizPage> {
   }
   @override
   Widget build(BuildContext context) {
+    final quizBloc = BlocProvider.of<QuizBloc>(context);
     return Scaffold(
         appBar: AppBar(
           title: BlocBuilder<QuizBloc, QuizState>(
             builder: (context, state) {
+              print(state.questions.length);
               return Text(
                   state.questions.isNotEmpty
                       ? 'Question ${state.currentQuestionIndex + 1}/${state.questions.length}'
@@ -159,10 +162,17 @@ class _QuizPageState extends State<QuizPage> {
                       textColor: Colors.white,
                       onTap: () {
                         if (state.selectedAnswer != null) {
+                          print('the selected anwer is ${state.selectedAnswer}');
                           if (state.currentQuestionIndex < state.questions.length - 1) {
                             context.read<QuizBloc>().add(NextQuestion());
                           } else {
                             // Submit the quiz and navigate to the next page
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => QuizResultPage(correctAnswersCount: quizBloc.correctAnswersCount, totalQuestions: quizBloc.state.questions.length),
+                              ),
+                            );
                           }
                         }
                       },
