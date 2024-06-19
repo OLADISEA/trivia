@@ -1,4 +1,9 @@
-abstract class QuizEvent {}
+import 'package:equatable/equatable.dart';
+
+sealed class QuizEvent extends Equatable {
+  @override
+  List<Object> get props => [];
+}
 
 class LoadQuestions extends QuizEvent {
   final int amount;
