@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 import 'package:trivia/features/home/presentation/pages/home_page.dart';
+import 'package:trivia/features/home/presentation/pages/profile_page.dart';
+import 'package:trivia/features/ranking/presentation/ranking_page.dart';
 
 class NavBarPage extends StatelessWidget {
   NavBarPage({Key? key}) : super(key: key);
@@ -13,8 +15,8 @@ class NavBarPage extends StatelessWidget {
     return [
       const HomePage(),
       //Center(child: Text('Home Screen')),
-      Center(child: Text('Leaders Board')),
-      Center(child: Text('Profile Screen')),
+      RankingPage(),
+      ProfilePage()
     ];
   }
 
