@@ -28,6 +28,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       await _firestore.collection('users').doc(userCredential.user!.uid).set({
         'name': event.name,
         'email': event.email,
+        'highScore': 0, // Initialize score to 0
       });
       emit(AuthSignUpSuccess());
     } catch (e) {
@@ -43,9 +44,12 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         password: event.password,
       );
       DocumentSnapshot userDoc = await _firestore.collection('users').doc(userCredential.user!.uid).get();
+      await _preferencesHelper.saveUserId(userCredential.user!.uid);
+      print('the user id is ${userCredential.user!.uid}');
       String userName = userDoc['name'];
-      _preferencesHelper.saveUserEmail(event.email);
-      _preferencesHelper.saveUserName(userName);
+      print('my name is $userName');
+      await _preferencesHelper.saveUserEmail(event.email);
+      await _preferencesHelper.saveUserName(userName);
 
       emit(AuthAuthenticated());
     } catch (e) {
@@ -54,6 +58,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   }
 
   Future<void> _onLogoutRequested(LogoutRequested event, Emitter<AuthState> emit) async {
+
     await _firebaseAuth.signOut();
     await _preferencesHelper.clearUserData();
     emit(AuthUnauthenticated());
