@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:trivia/features/auth/data/shared_preference_helper.dart';
 import 'package:trivia/features/auth/presentation/widgets/submit_button.dart';
 import 'package:trivia/features/quiz/data/quiz_repository.dart';
 import 'package:trivia/features/quiz/presentation/quiz_result/quiz_result_page.dart';
@@ -22,9 +23,12 @@ class QuizPage extends StatefulWidget {
 }
 
 class _QuizPageState extends State<QuizPage> {
+
+  String? userId;
   
   @override
   void initState() {
+    getUserId();
     context.read<QuizBloc>().add(LoadQuestions(
       amount: widget.amount,
       category: widget.category,
@@ -33,6 +37,15 @@ class _QuizPageState extends State<QuizPage> {
     ));
     super.initState();
   }
+
+  Future<void> getUserId()async{
+    String? userId = await SharedPreferencesHelper().getUserId();
+    setState(() {
+       this.userId = userId;
+    });
+    print('the user id in the quiz page is $userId');
+
+  }
   @override
   Widget build(BuildContext context) {
     final quizBloc = BlocProvider.of<QuizBloc>(context);
@@ -40,7 +53,7 @@ class _QuizPageState extends State<QuizPage> {
         appBar: AppBar(
           title: BlocBuilder<QuizBloc, QuizState>(
             builder: (context, state) {
-              print(state.questions.length);
+              //print(state.questions.length);
               return Text(
                   state.questions.isNotEmpty
                       ? 'Question ${state.currentQuestionIndex + 1}/${state.questions.length}'
@@ -66,7 +79,7 @@ class _QuizPageState extends State<QuizPage> {
         ),
         body: Padding(
           padding: const EdgeInsets.all(16.0),
-          child: BlocBuilder<QuizBloc, QuizState>(
+          child: BlocConsumer<QuizBloc, QuizState>(
             builder: (context, state) {
               if (state.questions.isEmpty) {
                 return const Center(
@@ -166,13 +179,10 @@ class _QuizPageState extends State<QuizPage> {
                           if (state.currentQuestionIndex < state.questions.length - 1) {
                             context.read<QuizBloc>().add(NextQuestion());
                           } else {
+                            print(userId);
                             // Submit the quiz and navigate to the next page
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => QuizResultPage(correctAnswersCount: quizBloc.correctAnswersCount, totalQuestions: quizBloc.state.questions.length),
-                              ),
-                            );
+                            context.read<QuizBloc>().add(UpdateUserScore(userScore: quizBloc.correctAnswersCount,userId: userId!));
+
                           }
                         }
                       },
@@ -180,27 +190,21 @@ class _QuizPageState extends State<QuizPage> {
                   ),
                 ],
               );
-            },
+            }, listener: (BuildContext context, QuizState state) {
+              if(state is QuizSubmittedState){
+                print('the questions in the state is ${state.questions.length}');
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => QuizResultPage(correctAnswersCount: quizBloc.correctAnswersCount, totalQuestions: quizBloc.state.questions.length),
+                  ),
+                );
+              }
+          },
           ),
         ),
       
     );
   }
 
-  List<Question> fetchQuestions() {
-    // Fetch and return questions from the trivia database
-    return [
-      Question(
-        question: 'What is the capital of France?',
-        answers: ['Berlin', 'Madrid', 'Paris', 'Lisbon'],
-        correctAnswer: 'Paris',
-      ),
-      Question(
-        question: 'What is the capital of Oyo?',
-        answers: ['Ibadan', 'Madrid', 'Paris', 'Lisbon'],
-        correctAnswer: 'Ibadan',
-      ),
-      // Add more questions here
-    ];
-  }
 }
