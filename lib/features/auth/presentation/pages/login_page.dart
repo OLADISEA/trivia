@@ -58,7 +58,9 @@ class LoginPage extends StatelessWidget {
                 },
                 listener: (BuildContext context, Object? state) {
                   if(state is AuthAuthenticated){
-                    Navigator.of(context).push(MaterialPageRoute(builder: (context)=> NavBarPage()));
+                    emailController.clear();
+                    passwordController.clear();
+                    Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)=> NavBarPage()));
                   }
                   if(state is AuthError){
                     final error = state.message;
