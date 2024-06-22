@@ -12,7 +12,7 @@ class GetStarted extends StatelessWidget {
     return InkWell(
       onTap: ()=>Navigator.of(context).push(MaterialPageRoute(builder: (context)=> LoginPage())),
       child: Container(
-        width: 140.w,
+        width: 180.w,
         height: 50,
         decoration: BoxDecoration(
           color: Colors.black,
