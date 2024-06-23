@@ -19,8 +19,6 @@ class QuizCategory extends StatelessWidget {
             childAspectRatio: 1, // Aspect ratio of each item
           ),
           itemBuilder: (context, index){
-            final imageList = ["general_knowledge.jpg","books.jpg","music.png","computer.jpg"];
-            final titleList = ["General knowledge","Books","Music","Computer"];
             return gridItem(context: context,image: categories[index+1].asset, quizTitle: categories[index+1].name, questionsNum: "1400",index: index+1);
           }),
     );
@@ -68,13 +66,19 @@ class QuizCategory extends StatelessWidget {
               ),
               //SizedBox(height: 70.h,),
               Container(
-                margin: EdgeInsets.only(top: 80.h),
-                  //height: 50.h,
+                margin: EdgeInsets.only(top: 70.h),
+                  height: 50.h,
                   //width: 100.w,
-                  child: Reusable(text: quizTitle,fontSize: 20.sp,textAlign: TextAlign.left,fontWeight: FontWeight.w700,)),
+                  child: Reusable(
+                    text: quizTitle,
+                    fontSize: 20.sp,
+                    textAlign: TextAlign.left,
+                    fontWeight: FontWeight.w700,
+                  )
+              ),
               //SizedBox(height: 5.h),
               Container(
-                  margin: EdgeInsets.only(top: 110.h),
+                  margin: EdgeInsets.only(top: 120.h),
                   child: Reusable(text: '$questionsNum questions',fontSize: 15.sp,))
             ],
           ),
