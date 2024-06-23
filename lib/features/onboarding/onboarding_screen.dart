@@ -14,13 +14,21 @@ class OnboardingPage extends StatelessWidget {
         child: Column(
           //crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Reusable(text: "Welcome to Trivia Quiz",fontSize: 25.sp,),
+            Container(
+                height: 100.h,
+                decoration: BoxDecoration(
+                  shape: BoxShape.rectangle,
+                  color: Colors.grey.withOpacity(0.4),
+                  borderRadius: BorderRadius.circular(20.r)
+                ),
+
+                child: Center(child: Reusable(text: "Welcome to Trivia Quiz",fontSize: 25.sp,textColor: Colors.grey.shade700,))),
             SizedBox(height: 35.h,),
             Container(
                 padding: EdgeInsets.only(left: 15.w,right: 15.w),
                 height: 60.h,
                 child: Reusable(text: "Challenge your knowledge and take quiz of your interest",fontSize: 22.sp,)),
-            SizedBox(height: 100.h,),
+            SizedBox(height: 30.h,),
             Image.asset("assets/images/quiz_logo.jpg",width: 300.w,),
             SizedBox(height: 70.h,),
             GetStarted()
