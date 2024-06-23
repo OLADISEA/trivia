@@ -100,34 +100,38 @@ class QuizBloc extends Bloc<QuizEvent, QuizState> {
   }
 
   void _updateUserScore(UpdateUserScore event, Emitter<QuizState> emit) async {
-    //emit(QuizLoadingState());
-    print(event.userId);
-    print('this is the user id ${event.userId}');
     DocumentReference userRef = _firestore.collection('users').doc(event.userId);
 
-    await _firestore.runTransaction((transaction) async {
-      DocumentSnapshot snapshot = await transaction.get(userRef);
+    try {
+      final snapshot = await userRef.get();
 
       if (!snapshot.exists) {
         throw Exception("User does not exist!");
       }
 
-      int currentHighScore = snapshot['highScore'];
+      await _firestore.runTransaction((transaction) async {
+        DocumentSnapshot snapshot = await transaction.get(userRef);
 
-      if (event.userScore > currentHighScore) {
-        transaction.update(userRef, {'highScore': event.userScore});
-      }
-    });
-    print('the state.question length is ${state.questions}');
+        int currentHighScore = snapshot['highScore'];
 
-    emit(QuizSubmittedState(
-      questions: state.questions,
-      currentQuestionIndex: state.currentQuestionIndex,
-      remainingTime: state.remainingTime,
-      selectedAnswer: state.selectedAnswer,
-      correctAnswer: state.correctAnswer,
-      userAnswers: state.userAnswers,
-    ));
+        if (event.userScore > currentHighScore) {
+          transaction.update(userRef, {'highScore': event.userScore});
+        }
+
+        transaction.update(userRef, {'recentScore': event.userScore});
+      });
+
+      emit(QuizSubmittedState(
+        questions: state.questions,
+        currentQuestionIndex: state.currentQuestionIndex,
+        remainingTime: state.remainingTime,
+        selectedAnswer: state.selectedAnswer,
+        correctAnswer: state.correctAnswer,
+        userAnswers: state.userAnswers,
+      ));
+    } catch (e) {
+      emit(QuizStateError('Failed to update user score: ${e.toString()}'));
+    }
   }
 
   int get correctAnswersCount => _userScore;
