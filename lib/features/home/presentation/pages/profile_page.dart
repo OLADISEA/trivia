@@ -7,18 +7,19 @@ import 'package:trivia/features/home/presentation/widgets/user_ranking.dart';
 import 'package:trivia/features/settings/widgets/sign_out.dart';
 
 class ProfilePage extends StatelessWidget {
-  const ProfilePage({Key? key}) : super(key: key);
+  const ProfilePage({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
+        margin: EdgeInsets.symmetric(horizontal: 31.h,vertical: 50.h),
         child: Column(
           children: [
-            Reusable(text: "Profile"),
-            Image.asset("assets/images/user-image.png"),
-            Reusable(text: "Oladisea"),
-            Reusable(text: "ladisea55@gmail.com"),
+            Reusable(text: "Profile",fontSize: 18.sp,),
+            Image.asset("assets/images/user-image.png",),
+            Reusable(text: "Oladisea",fontSize: 15.sp,),
+            Reusable(text: "ladisea55@gmail.com",fontSize: 16.sp,),
 
             const UserRanking(),
             const GameStats(statTitle: "Last game score", playerStat: '19.75'),
@@ -33,11 +34,12 @@ class ProfilePage extends StatelessWidget {
 
 
             Row(
+              mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                SignOut(),
+                const SignOut(),
 
                 SizedBox(width: 15.w,),
-                ProfileAction(text: "Edit Proifle", icon: Icons.edit)
+                const ProfileAction(text: "Edit Profile", icon: Icons.edit)
 
               ],
             ),
