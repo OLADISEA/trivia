@@ -1,78 +1,58 @@
 import 'package:flutter/material.dart';
-import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:trivia/features/home/presentation/pages/home_page.dart';
 import 'package:trivia/features/home/presentation/pages/profile_page.dart';
 import 'package:trivia/features/ranking/presentation/ranking_page.dart';
 
-class NavBarPage extends StatelessWidget {
+class NavBarPage extends StatefulWidget {
   NavBarPage({Key? key}) : super(key: key);
 
-  //late bool _hideNavBar;
-  final PersistentTabController _controller = PersistentTabController(initialIndex: 0);
+  @override
+  _NavBarPageState createState() => _NavBarPageState();
+}
 
-  // @override
-  List<Widget> _buildScreens() {
-    return [
-      const HomePage(),
-      //Center(child: Text('Home Screen')),
-      RankingPage(),
-      ProfilePage()
-    ];
-  }
+class _NavBarPageState extends State<NavBarPage> {
+  int _selectedIndex = 0;
 
-  List<PersistentBottomNavBarItem> _navBarsItems() {
-    return [
-      PersistentBottomNavBarItem(
-        icon: Icon(Icons.home),
-        title: ("Home"),
-        activeColorPrimary: Colors.blue,
-        inactiveColorPrimary: Colors.grey,
-      ),
-      PersistentBottomNavBarItem(
-        icon: Icon(Icons.search),
-        title: ("Leaders Board"),
-        activeColorPrimary: Colors.blue,
-        inactiveColorPrimary: Colors.grey,
-      ),
-      PersistentBottomNavBarItem(
-        icon: Icon(Icons.person),
-        title: ("Profile"),
-        activeColorPrimary: Colors.blue,
-        inactiveColorPrimary: Colors.grey,
-      ),
-    ];
+  static List<Widget> _pages = <Widget>[
+    HomePage(),
+    RankingPage(),
+    ProfilePage(),
+  ];
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: PersistentTabView(
-        context,
-        controller: _controller,
-        screens: _buildScreens(),
-        items: _navBarsItems(),
-        confineInSafeArea: true,
-        backgroundColor: Colors.white, // Default is Colors.white.
-        handleAndroidBackButtonPress: true, // Default is true.
-        resizeToAvoidBottomInset: true, // This needs to be true if you want to move up the screen when keyboard appears.
-        stateManagement: true, // Default is true.
-        hideNavigationBarWhenKeyboardShows: true, // Recommended to set 'true' to hide bottom nav bar when keyboard appears.
-        decoration: NavBarDecoration(
-          borderRadius: BorderRadius.circular(10.0),
-          colorBehindNavBar: Colors.white,
-        ),
-        popAllScreensOnTapOfSelectedTab: true,
-        popActionScreens: PopActionScreensType.all,
-        itemAnimationProperties: ItemAnimationProperties(
-          duration: Duration(milliseconds: 200),
-          curve: Curves.ease,
-        ),
-        screenTransitionAnimation: ScreenTransitionAnimation(
-          animateTabTransition: true,
-          curve: Curves.ease,
-          duration: Duration(milliseconds: 200),
-        ),
-        navBarStyle: NavBarStyle.style6, // Choose the nav bar style with this property.
+      body: _pages.elementAt(_selectedIndex),
+      bottomNavigationBar: BottomNavigationBar(
+        items: const <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'Home',
+          ),
+          BottomNavigationBarItem(
+            icon: ImageIcon(
+              AssetImage("assets/icons/leaderboard.png"),
+              //size: 30.sp, // Adjust the size here
+            ),
+            backgroundColor: Colors.transparent,
+            label: 'Leaders Board',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person),
+            label: 'Profile',
+          ),
+        ],
+        currentIndex: _selectedIndex,
+        selectedItemColor: Colors.blue,
+        unselectedItemColor: Colors.grey,
+        onTap: _onItemTapped,
       ),
     );
   }
