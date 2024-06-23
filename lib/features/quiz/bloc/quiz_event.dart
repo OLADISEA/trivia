@@ -34,3 +34,10 @@ class UpdateTimer extends QuizEvent {
 
   UpdateTimer(this.remainingTime);
 }
+
+class UpdateUserScore extends QuizEvent{
+  final int userScore;
+  final String userId;
+
+  UpdateUserScore({required this.userScore,required this.userId});
+}
