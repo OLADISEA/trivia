@@ -9,9 +9,9 @@ class QuizType extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        SubmitButton(text: "Random Quiz", color: Colors.blueAccent,textColor: Colors.white,width: 150.w,),
+        SubmitButton(text: "Random Quiz", color: Colors.blueAccent,textColor: Colors.white,width: 160.w,),
         SizedBox(width: 10.w,),
-        SubmitButton(text: "Custom Quiz", color: Colors.blueAccent,textColor: Colors.white,width: 150.w,)
+        SubmitButton(text: "Custom Quiz", color: Colors.blueAccent,textColor: Colors.white,width: 160.w,)
 
       ],
     );
