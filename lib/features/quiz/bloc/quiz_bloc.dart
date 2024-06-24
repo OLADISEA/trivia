@@ -18,6 +18,8 @@ class QuizBloc extends Bloc<QuizEvent, QuizState> {
     on<NextQuestion>(_onNextQuestion);
     on<UpdateTimer>(_onUpdateTimer);
     on<UpdateUserScore>(_updateUserScore);
+    on<ResetQuiz>(_onResetQuiz);
+
   }
 
   Future<void> _onLoadQuestions(LoadQuestions event, Emitter<QuizState> emit) async {
@@ -39,7 +41,12 @@ class QuizBloc extends Bloc<QuizEvent, QuizState> {
 
       print("The bloc state has the set of questions");
       print(questions.length);
-      final newState = state.copyWith(questions: questions, userAnswers: newUserAnswers);
+      final newState = state.copyWith(
+          questions: questions,
+          currentQuestionIndex: 0, // Reset to the first question
+          remainingTime: 30, // Reset remaining time for new questions
+          userAnswers: newUserAnswers
+      );
       emit(newState);
 
       // Print after emitting the new state
@@ -101,6 +108,8 @@ class QuizBloc extends Bloc<QuizEvent, QuizState> {
 
   void _updateUserScore(UpdateUserScore event, Emitter<QuizState> emit) async {
     DocumentReference userRef = _firestore.collection('users').doc(event.userId);
+    print("The user ref does not have any proble here");
+    print(userRef);
 
     try {
       final snapshot = await userRef.get();
@@ -112,14 +121,33 @@ class QuizBloc extends Bloc<QuizEvent, QuizState> {
       await _firestore.runTransaction((transaction) async {
         DocumentSnapshot snapshot = await transaction.get(userRef);
 
-        int currentHighScore = snapshot['highScore'];
+        double currentHighScore = snapshot['highScore'];
+        //double weeklyScore = snapshot['weeklyScore'] ?? 0;
+        Timestamp lastUpdateTimestamp = snapshot['lastUpdateTimestamp'] ?? Timestamp.now();
+        DateTime lastUpdateDate = lastUpdateTimestamp.toDate();
+        DateTime now = DateTime.now();
+
+        // if (_isDifferentWeek(lastUpdateDate, now)) {
+        //   // Reset weekly score if it's a new week
+        //   weeklyScore = 0.0;
+        // }
+
+        // Update weekly score if the current user score is higher
+        // if (event.userScore > weeklyScore) {
+        //   weeklyScore = event.userScore.toDouble();
+        // }
 
         if (event.userScore > currentHighScore) {
-          transaction.update(userRef, {'highScore': event.userScore});
+          transaction.update(userRef, {'highScore': event.userScore.toDouble()});
         }
 
-        transaction.update(userRef, {'recentScore': event.userScore});
+        transaction.update(userRef, {
+          'recentScore': event.userScore.toDouble(),
+          //'weeklyScore': weeklyScore,
+          'lastUpdateTimestamp': Timestamp.now(),
+        });
       });
+      print("No problem so far");
 
       emit(QuizSubmittedState(
         questions: state.questions,
@@ -129,9 +157,23 @@ class QuizBloc extends Bloc<QuizEvent, QuizState> {
         correctAnswer: state.correctAnswer,
         userAnswers: state.userAnswers,
       ));
+      print('quiz submitted state has been emitted');
     } catch (e) {
       emit(QuizStateError('Failed to update user score: ${e.toString()}'));
     }
+  }
+
+  bool _isDifferentWeek(DateTime lastUpdateDate, DateTime now) {
+    // Compare the year and week of the year to determine if it's a different week
+    var lastUpdateWeek = _getWeekOfYear(lastUpdateDate);
+    var currentWeek = _getWeekOfYear(now);
+    return lastUpdateDate.year != now.year || lastUpdateWeek != currentWeek;
+  }
+
+  int _getWeekOfYear(DateTime date) {
+    var firstDayOfYear = DateTime(date.year, 1, 1);
+    var daysSinceFirstDay = date.difference(firstDayOfYear).inDays;
+    return (daysSinceFirstDay / 7).ceil();
   }
 
   int get correctAnswersCount => _userScore;
@@ -140,6 +182,14 @@ class QuizBloc extends Bloc<QuizEvent, QuizState> {
   void resetScore() {
     _userScore = 0;
   }
+
+
+  void _onResetQuiz(ResetQuiz event, Emitter<QuizState> emit) {
+    emit(const QuizState()); // Reset to initial state
+    _userScore = 0;
+    _timer?.cancel();
+  }
+
 
   @override
   Future<void> close() {
