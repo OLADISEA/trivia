@@ -3,6 +3,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:trivia/features/auth/presentation/bloc/auth_bloc.dart';
+import 'package:trivia/features/home/data/user_service.dart';
+import 'package:trivia/features/home/presentation/bloc/user_stats_bloc.dart';
 import 'package:trivia/features/ranking/bloc/ranking_bloc.dart';
 import 'package:trivia/firebase_options.dart';
 
@@ -21,7 +23,8 @@ void main() async{
           providers: [
             BlocProvider(create: (context) => AuthBloc()),
             BlocProvider(create: (context) => QuizBloc(quizRepository: QuizRepository())),
-            BlocProvider(create: (context)=> RankingBloc())
+            BlocProvider(create: (context)=> RankingBloc()),
+            BlocProvider(create: (context)=> UserStatsBloc(UserService()))
           ],
           child: const MyApp()));
 }
