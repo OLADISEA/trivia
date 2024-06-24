@@ -41,3 +41,6 @@ class UpdateUserScore extends QuizEvent{
 
   UpdateUserScore({required this.userScore,required this.userId});
 }
+
+
+class ResetQuiz extends QuizEvent {}
