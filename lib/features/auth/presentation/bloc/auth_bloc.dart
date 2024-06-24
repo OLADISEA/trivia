@@ -25,11 +25,19 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         email: event.email,
         password: event.password,
       );
+
       await _firestore.collection('users').doc(userCredential.user!.uid).set({
         'name': event.name,
         'email': event.email,
-        'highScore': 0, // Initialize score to 0
+        'highScore': 0.0, // Initialize scores to 0
+        'recentScore': 0.0,
+        // 'weeklyScore': 0.0,
+        // 'weeklyRank': 0, // Initialize weekly rank to 0
+        // 'monthlyScore': 0.0, // Initialize monthly score to 0
+        // 'monthlyRank': 0,
+        'lastUpdateTimestamp': Timestamp.now(),
       });
+
       emit(AuthSignUpSuccess());
     } catch (e) {
       emit(AuthError(e.toString()));
@@ -43,13 +51,28 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         email: event.email,
         password: event.password,
       );
+
       DocumentSnapshot userDoc = await _firestore.collection('users').doc(userCredential.user!.uid).get();
+
+      if (!userDoc.exists) {
+        throw Exception('User data does not exist!');
+      }
+
       await _preferencesHelper.saveUserId(userCredential.user!.uid);
-      print('the user id is ${userCredential.user!.uid}');
       String userName = userDoc['name'];
-      print('my name is $userName');
       await _preferencesHelper.saveUserEmail(event.email);
       await _preferencesHelper.saveUserName(userName);
+
+      // Fetch and save user scores
+      double highScore = userDoc['highScore'];
+      double recentScore = userDoc['recentScore'];
+      // double weeklyScore = userDoc['weeklyScore'];
+      // double lastGameScore = userDoc['recentScore'];
+
+      await _preferencesHelper.saveHighScore(highScore);
+      await _preferencesHelper.saveRecentScore(recentScore);
+      // await _preferencesHelper.saveWeeklyScore(weeklyScore);
+      // await _preferencesHelper.saveLastGameScore(lastGameScore);
 
       emit(AuthAuthenticated());
     } catch (e) {
@@ -58,7 +81,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   }
 
   Future<void> _onLogoutRequested(LogoutRequested event, Emitter<AuthState> emit) async {
-
     await _firebaseAuth.signOut();
     await _preferencesHelper.clearUserData();
     emit(AuthUnauthenticated());
