@@ -7,7 +7,7 @@ import '../../../widgets/flutter_toast.dart';
 import '../../../widgets/reusable_text.dart';
 import '../../nav_bar/nav_bar_page.dart';
 import '../bloc/auth_bloc.dart';
-import '../widgets/submit_button.dart';
+import '../../../widgets/submit_button.dart';
 import '../widgets/text_button.dart';
 import '../widgets/textfield.dart';
 import 'forgot_password.dart';

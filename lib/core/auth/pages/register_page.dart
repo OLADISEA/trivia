@@ -5,7 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../widgets/flutter_toast.dart';
 import '../../../widgets/reusable_text.dart';
 import '../bloc/auth_bloc.dart';
-import '../widgets/submit_button.dart';
+import '../../../widgets/submit_button.dart';
 import '../widgets/text_button.dart';
 import '../widgets/textfield.dart';
 import 'login_page.dart';

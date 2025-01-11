@@ -7,7 +7,7 @@ import 'package:image_picker/image_picker.dart';
 import '../../data/shared_preference_helper.dart';
 import '../../widgets/back_arrow.dart';
 import '../../widgets/reusable_text.dart';
-import '../auth/widgets/submit_button.dart';
+import '../../widgets/submit_button.dart';
 import '../auth/widgets/textfield.dart';
 import 'bloc/theme_bloc/theme_bloc.dart';
 import 'bloc/theme_bloc/theme_event.dart';
@@ -31,61 +31,55 @@ class _SettingsState extends State<Settings> {
   String? username;
   String? userEmail;
 
-  TextEditingController nameController = TextEditingController();
+  final TextEditingController nameController = TextEditingController();
 
-  TextEditingController emailController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
+
+  final SharedPreferencesHelper _sharedPreferencesHelper = SharedPreferencesHelper();
 
   @override
   void initState() {
     super.initState();
-    getUserId();
-    getUsername();
-    getUserEmail();
-    getUserImageUrl();
+    _loadUserData();
 
   }
 
-  Future<void> getUserId() async{
-    String? userId = await SharedPreferencesHelper().getUserId();
-    setState(() {
-      this.userId = userId;
-    });
-  }
 
-  Future<void> getUsername() async {
-    String? username = await SharedPreferencesHelper().getUserName();
-    setState(() {
-      this.username = username;
-    });
-  }
+  Future<void> _loadUserData() async {
+    try {
+      String? userId = await _sharedPreferencesHelper.getUserId();
+      String? username = await _sharedPreferencesHelper.getUserName();
+      String? userEmail = await _sharedPreferencesHelper.getUserEmail();
+      String? userImageUrl = await _sharedPreferencesHelper.getUserImageUrl();
 
-  Future<void> getUserEmail() async {
-    String? userEmail = await SharedPreferencesHelper().getUserEmail();
-    setState(() {
-      this.userEmail = userEmail;
-    });
-  }
-
-
-  Future<void> getUserImageUrl() async {
-    String? imageUrl = await SharedPreferencesHelper().getUserImageUrl();
-    setState(() {
-      userImageUrl = imageUrl;
-    });
-    if(userImageUrl != null){
-      print("this is not null");
+      setState(() {
+        this.userId = userId;
+        this.username = username;
+        this.userEmail = userEmail;
+        this.userImageUrl = userImageUrl;
+      });
+    } catch (e) {
+      // Handle error here
+      print("Failed to load user data: $e");
     }
   }
+
 
 
   Future<void> _pickImage(BuildContext context) async {
-    final picker = ImagePicker();
-    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+    try {
+      final picker = ImagePicker();
+      final pickedFile = await picker.pickImage(source: ImageSource.gallery);
 
-    if (pickedFile != null && userId != null) {
-      context.read<ImageBloc>().add(UploadImageEvent(userId!, pickedFile.path));
+      if (pickedFile != null && userId != null) {
+        context.read<ImageBloc>().add(UploadImageEvent(userId!, pickedFile.path));
+      }
+    } catch (e) {
+      // Handle error here
+      print("Failed to pick image: $e");
     }
   }
+
 
   @override
   Widget build(BuildContext context) {

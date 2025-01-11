@@ -4,7 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../widgets/reusable_text.dart';
 import '../bloc/auth_bloc.dart';
-import '../widgets/submit_button.dart';
+import '../../../widgets/submit_button.dart';
 import '../widgets/textfield.dart';
 
 class ForgotPasswordPage extends StatelessWidget {

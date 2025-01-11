@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../data/category_data.dart';
-import '../../auth/widgets/submit_button.dart';
+import '../../../widgets/submit_button.dart';
 import '../quiz_page.dart';
 
 class QuizParameterPage extends StatefulWidget {

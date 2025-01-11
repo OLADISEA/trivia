@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import '../../../widgets/reusable_text.dart';
+import 'reusable_text.dart';
 
 
 class SubmitButton extends StatelessWidget {
@@ -9,8 +9,11 @@ class SubmitButton extends StatelessWidget {
   final Color color;
   final Color? textColor;
   final double? width;
+  final double? height;
+  final double? radius;
   final void Function()? onTap;
-  const SubmitButton({super.key, this.onTap, required this.text, required this.color, this.textColor, this.width});
+  const SubmitButton({super.key,
+    this.onTap, required this.text, required this.color, this.textColor, this.width, this.height, this.radius});
 
   @override
   Widget build(BuildContext context) {
@@ -18,10 +21,10 @@ class SubmitButton extends StatelessWidget {
       onTap: onTap,
       child: Container(
         width: width??325.w,
-        height: 50.h,
+        height: height??50.h,
         decoration: BoxDecoration(
           color: color,
-          borderRadius: BorderRadius.circular(15.r)
+          borderRadius: BorderRadius.circular(radius??15.r)
         ),
         child: Center(child: Reusable(text: text,fontSize: 18.sp,textColor: textColor,)),
       ),

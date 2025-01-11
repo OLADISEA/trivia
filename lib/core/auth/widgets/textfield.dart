@@ -14,7 +14,7 @@ class AuthTextField extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextField(
       controller:  controller,
-      obscureText: text == "Password"?obscureText:false,
+      obscureText: text == "Password"?!obscureText:false,
       decoration: InputDecoration(
         suffixIcon: text == "Password"
             ? IconButton(

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import '../../auth/widgets/submit_button.dart';
+import '../../../widgets/submit_button.dart';
 
 class QuizType extends StatelessWidget {
   const QuizType({Key? key}) : super(key: key);

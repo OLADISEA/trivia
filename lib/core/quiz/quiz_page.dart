@@ -4,7 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:trivia/core/quiz/screens/quiz_result_page.dart';
 import '../../data/shared_preference_helper.dart';
 import '../../widgets/flutter_toast.dart';
-import '../auth/widgets/submit_button.dart';
+import '../../widgets/submit_button.dart';
 import 'bloc/quiz_bloc.dart';
 import 'bloc/quiz_event.dart';
 import 'bloc/quiz_state.dart';

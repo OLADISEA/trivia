@@ -36,7 +36,7 @@ class QuizCategory extends StatelessWidget {
           Navigator.of(context).push(MaterialPageRoute(builder: (context)=> QuizParameterPage(title: quizTitle,index: index)));
         },
         child: Container(
-          margin: EdgeInsets.only(left: 25.w,right: 25.w),
+          margin: EdgeInsets.only(top:index == 2?10.w:0,left: 25.w,right: 25.w),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(15.r),
             color: Colors.white,

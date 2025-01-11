@@ -4,7 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../auth/bloc/auth_bloc.dart';
 import '../../auth/pages/login_page.dart';
-import '../../auth/widgets/submit_button.dart';
+import '../../../widgets/submit_button.dart';
 
 
 class SignOut extends StatelessWidget {
