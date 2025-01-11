@@ -3,7 +3,7 @@ part of 'auth_bloc.dart';
 class AuthState extends Equatable {
   final bool isVisible;
   const AuthState({
-    this.isVisible = true,
+    this.isVisible = false,
   });
 
   @override
